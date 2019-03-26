@@ -18,7 +18,12 @@ public class Main {
          String username, password;
 
 		/**
-         * Scelta da parte dell'utente di iscriversi oppure di autenticarsi.
+		 * credo degli oggetti preimpostati e li carico nel programma per i test.
+		 */
+		Database.initAllObject();
+
+		/**
+		 * Scelta da parte dell'utente di iscriversi oppure di autenticarsi.
          */
 
          boolean end = false;
@@ -56,18 +61,7 @@ public class Main {
                      * Una volta che il Login è andato a buon fine controlliamo che l'iscrizione dell'user sia ancora valida.
                      * Se non lo è, ovvero sono decaduti i privilegi, può avvenire il rinnovo dell'iscrizione.
          			 */
-					username= Library.insertString(View.USER_NAME);
-					password= Library.insertString(View.PASSWORD);
-
-					/**
-					 * Si controlla per&ograve; prima se l'utente non sia un operatore,
-					 * e lo si autentica come admin e gli viene permesso di visualizzare l'elenco degli utenti.
-					 */
-					if(Library.checkIfAdmin(username,password)){
-						System.out.println(View.BENVENUTO_ADMIN);
-						Library.stampaUser();
-					}
-         			else Library.checkLoginIfTrue(username,password);
+					Library.checkLoginIfTrue();
          			break;
          	
          		default:

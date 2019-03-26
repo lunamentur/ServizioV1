@@ -31,37 +31,35 @@ public class Library {
             Database.insertUser(user);
         }
     }
-    
-    /**
-     * Medoto per inserire la data di nascita, di tipo LocalDate, dell'user.
-     * Prende da tastiera anno, mese e giorno e crea una data di tipo LocalDate.
+
+	/**
+	 * Medoto per inserire la data di nascita, di tipo LocalDate, dell'user.
+	 * Prende da tastiera anno, mese e giorno e crea una data di tipo LocalDate.
 	 * @return birthDate
-     */
-    public static LocalDate insertDate(){
-    	end= false;
-		System.out.println(View.DATA_NASCITA);
-    	while(!end){
-			System.out.println(View.YEAR);
-    		year= readInt();
-    		if(String.valueOf(year).length()==4)
-    		{
-				System.out.println(View.MONTH);
-    			month= readInt();
-				System.out.println(View.DAY);
-    			day=readInt();
-    			if(String.valueOf(month).length()==2 && String.valueOf(day).length()==2)
-    			{
-    				birthDate= LocalDate.of(year,month,day);
-    				end=true;
-    			}
-    		}
-    		else {
+	 */
+	public static LocalDate insertDate(){
+		boolean end= false;
+		View.stampaRichiestaSingola(View.DATA_NASCITA);
+		while(!end){
+			View.stampaRichiestaSingola(View.YEAR);
+			year= readInt();
+			if(String.valueOf(year).length()==4)
+			{
+				View.stampaRichiestaSingola(View.MONTH);
+				month= readInt();
+				View.stampaRichiestaSingola(View.DAY);
+				day=readInt();
+				if((String.valueOf(month).length()<=2 && month <= 12 ) && (( String.valueOf(day).length() <= 2) && day <= 31)) {
+					birthDate= LocalDate.of(year,month,day);
+					end=true;
+				}
+			}
+			else {
 				System.out.println(View.MG_ERRORE);
 			}
-    	}
-    	return birthDate;
-    }
-
+		}
+		return birthDate;
+	}
 
 	/**
 	 * Metodo che permette di acquisire da tastiera una stringa, purche\' non sia vuota.
@@ -96,31 +94,48 @@ public class Library {
 		else return false;
 	}
 
+
+
     /**
-     * Metooo di controllo del Login da parte dell'User. L'autenticazione va a buon fine se l'username è presente all'interno
-	 * del Databese e se la password inserita corrisponde. Altrimenti si può uscire dal metodo o continuare a riprovare l'inserimento.
-     */
-	public static void checkLoginIfTrue(String username, String password){
+	 * Metooo di controllo del Login da parte dell'User. L'autenticazione va a buon fine se l'username &egrave; presente all'interno
+	 * del Databese e se la password inserita corrisponde. Altrimenti si pu&ograve; uscire dal metodo o continuare a riprovare l'inserimento.
+	 */
+	public static void checkLoginIfTrue(){
 		boolean end = false;
 		do
 		{
-			if(Database.checkLogin(username,password)==true){
-				System.out.println(View.AUTENTICAZIONE_SUCCESSO);
-				/**
-				 * Controllo se l'iscrizione è scaduta.
-				 */
-				renewalRegistration(Database.getUser(username));
+			username=insertString(View.USER_NAME);
+			password=insertString(View.PASSWORD);
+
+			/**
+			 * Si controlla per&ograve; prima se l'utente non sia un operatore,
+			 * e lo si autentica come admin e gli viene permesso di visualizzare l'elenco degli utenti.
+			 */
+			if(checkIfAdmin(username,password)){
+				System.out.println(View.BENVENUTO_ADMIN);
+				stampaUser();
+				//esce dal ciclo
 				end=true;
 			}
-			else {
-				System.out.println(View.MG_ERRORE+ View.MG_ANCORA);
-				choise= readInt();
-				/**
-				 * Continua a ciclare se viene premuto 0, altrimenti si esce dal ciclo.
-				 */
-				if(choise==0);
-				else end=true;
+			else{
+				if(Database.checkLogin(username,password)){
+					System.out.println(View.AUTENTICAZIONE_SUCCESSO);
+					/**
+					 * Controllo se l'iscrizione è scaduta.
+					 */
+					renewalRegistration(Database.getUser(username));
+					end=true;
+				}
+				else {
+					System.out.println(View.MG_ERRORE+ View.MG_ANCORA);
+					choise= readInt();
+					/**
+					 * Continua a ciclare se viene premuto 0, altrimenti si esce dal ciclo.
+					 */
+					if(choise!=0) end=true;
+				}
 			}
+
 		}while(!end);
 	}
 

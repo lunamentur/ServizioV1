@@ -1,13 +1,16 @@
 package database;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import user.User;
 
 /**
  * Classe Database che racchiude metodi e gestione del database in cui sono raccolti tutti gli user e oggetti inerenti.
- * @author Reda, Simona
+ * @author Reda Kassame, Simona Ramazzotti.
+ * @version 1
  */
 public class Database {
 
@@ -28,29 +31,27 @@ public class Database {
      * Metodo, di stampa, che permette di visualizzare a video la lista di tutti gli user all'interno del database, l'HashMap.
      */
     public static void listUsers(){
-        System.out.println(userList);
+        for (Map.Entry<String,User> user: userList.entrySet()){
+            System.out.println(user.toString());
+        }
     }
 
     /**
      * Metodo che permette all'user di effettuare il login. Verifica che esista il nome utente, username, e controlla che la password sia la medesima.
      * Se il login va a buon fine, ritorna true, l'user ha accesso ai servizi di prestito temporaneo, altrimenti false.
-     * @param username
-     * @param password
-     * @return false login non riuscito.
-     * @return true login riuscito corettamente.
+     * @param username {@link User}
+     * @param password {@link User}
+     * @return false login non riuscito, true login riuscito corettamente.
      */
     public static boolean checkLogin(String username, String password){
-        if(userList.containsValue(username) && userList.get(username).getPassword() == password){
-            return true;
-        }else{
-            return false;
-        }
+        if(userList.containsKey(username) && userList.get(username).getPassword().equals(password)) return true;
+        else return false;
     }
 
     /**
      * Metodo che ritorna l'user, l'oggetto di tipo User, preso dal Database.
-     * @param username
-     * @return user
+     * @param username {@link User}
+     * @return user oggetto di tipo User {@link User}
      */
     public static User getUser(String username){
         return userList.get(username);
@@ -74,4 +75,20 @@ public class Database {
             return false;
         }
     }
+
+
+    /**
+     * Creazione di oggetti preimpostati.
+     */
+    public static void initAllObject() {
+        //genero utenti
+        User user1 = new User("test", "test", "test1", "test1", LocalDate.of(1996, 12, 01), LocalDate.of(2018, 01, 01));
+        User user2 = new User("test", "test", "test2", "test2", LocalDate.of(2000, 12, 01), LocalDate.of(1996, 01, 01));
+        User user3 = new User("test", "test", "test3", "test3", LocalDate.of(1988, 12, 01), LocalDate.of(2019, 01, 01));
+        userList.put(user1.getUsername(), user1);
+        userList.put(user2.getUsername(), user2);
+        userList.put(user3.getUsername(), user3);
+    }
+
+
 }

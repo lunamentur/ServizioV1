@@ -13,7 +13,6 @@ public class User {
     private String name, surname, password, username;
     private LocalDate birthDate;
     private LocalDate registrationDate;
-    private Integer id;
 
     /**
      * Costruttore della Classe User, che crea un oggetto di tipo Utente con particolari privilegi e
@@ -46,14 +45,6 @@ public class User {
     /**
      * Metodi di Set e Get della classe User.
      */
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -105,5 +96,16 @@ public class User {
      */
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    @Override
+    public String toString() {
+        return username + "  {" +
+                " name=  '" + name + '\'' +
+                ", surname=  '" + surname + '\'' +
+                ", username=  '" + username + '\'' +
+                ", birthDate=  " + birthDate +
+                ", registrationDate=  " + registrationDate +
+                "  }";
     }
 }
