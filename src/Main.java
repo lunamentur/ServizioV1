@@ -4,29 +4,31 @@ import view.View;
 
 import java.time.LocalDate;
 
-import static library.Library.readStringNotNull;
-import static library.Library.registrationProcess;
+import static library.Library.*;
 //import java.sql.SQLException;
 
+/**
+ * Classe main del programma servizio temporaneo di prestiti.
+ * @author Reda Kassame, Simona Ramazzotti.
+ * @version 1
+ */
 public class Main {
     public static void main(String[] args) {
 
-    	 //View view=new View();
-         String name, surname, username, password;
-         LocalDate birthDate, registrationDate;
-         
+         String username, password;
 
-         /**
-          * Scelta da parte dell'utente di iscriversi oppure di autenticarsi.
-          */
-		System.out.println(View.MG_INIZIALE);
-		View.stampaMenuSpecifico(View.RICHIESTE_MENU_INIZIALE);
-		int choise=Library.readInt();
-         
+		/**
+         * Scelta da parte dell'utente di iscriversi oppure di autenticarsi.
+         */
+
          boolean end = false;
      	do
-     	{	
-     		switch(choise){
+     	{
+			System.out.println(View.MG_INIZIALE);
+			View.stampaMenuSpecifico(View.RICHIESTE_MENU_INIZIALE);
+			int choise=Library.readInt();
+
+			switch(choise){
          		
      		/**
      		 * Iscrizione
@@ -41,9 +43,7 @@ public class Main {
 
 					Library.registrationProcess();
 					System.out.println(View.GRAZIE_ISCRIZIONE);
-     				
-         		    choise=0;
-         			break;
+					break;
          			
          	/**
          	 * Autenticazione (Login)
@@ -56,8 +56,18 @@ public class Main {
                      * Una volta che il Login è andato a buon fine controlliamo che l'iscrizione dell'user sia ancora valida.
                      * Se non lo è, ovvero sono decaduti i privilegi, può avvenire il rinnovo dell'iscrizione.
          			 */
-					Library.checkLoginIfTrue();
-         			choise=0;
+					username= Library.insertString(View.USER_NAME);
+					password= Library.insertString(View.PASSWORD);
+
+					/**
+					 * Si controlla per&ograve; prima se l'utente non sia un operatore,
+					 * e lo si autentica come admin e gli viene permesso di visualizzare l'elenco degli utenti.
+					 */
+					if(Library.checkIfAdmin(username,password)){
+						System.out.println(View.BENVENUTO_ADMIN);
+						Library.stampaUser();
+					}
+         			else Library.checkLoginIfTrue(username,password);
          			break;
          	
          		default:
@@ -65,6 +75,7 @@ public class Main {
          			break;
          		case 0:
          		    end=true;
+         		    System.out.println(View.FINE_MENU);
          			break;
      		}
      	}while(!end);

@@ -9,27 +9,24 @@ import java.util.*;
 
 /**
  * Classe intermedia che permette l'interazione tra la classe User e la classe Database.
- * @author Reda , Simona
+ * @author Reda Kassame, Simona Ramazzotti.
+ * @version 1
  */
 public class Library {
 	
-	public final static String MG_ERRORE="Hai inserito un valore non valido\n";
 	private static boolean end;
-	private static String surname, name, password, username;
+	private static String  password, username, string;
 	private static int year, month, day, choise;
 	private static long rangeYear=5;
 	private static long rangeDay=-10;
 	public static LocalDate birthDate;
-	static View view=new View();
-
-	//System.out.println(View.);
 
 	/**
 	 * Metodo che assembla i metodi per la registrazione con i relativi controlli e salva il nuovo user,
 	 * oggetto di tipo User, all'interno del Database.
 	 */
     public static void registrationProcess(){
-        User user = new User(insertName(), insertSurname(), insertUsername(), insertPass(), insertDate(), LocalDate.now());
+        User user = new User(insertString(View.NOME), insertString(View.COGNOME), insertString(View.USER_NAME), insertString(View.PASSWORD), insertDate(), LocalDate.now());
         if(Database.checkIf18(user.getBirthDate()) != false){
             Database.insertUser(user);
         }
@@ -43,7 +40,6 @@ public class Library {
     public static LocalDate insertDate(){
     	end= false;
 		System.out.println(View.DATA_NASCITA);
-		view.stampaMenuIscrizione(5); //
     	while(!end){
 			System.out.println(View.YEAR);
     		year= readInt();
@@ -66,73 +62,50 @@ public class Library {
     	return birthDate;
     }
 
+
 	/**
-	 * Medoto per inserire il nome, di tipo String, dell'user.
-	 * @return name
+	 * Metodo che permette di acquisire da tastiera una stringa, purche\' non sia vuota.
+	 * @param tipoInserimento stringa che permette di generalizzare il metodo di inserimento, stampandola a video.
+	 * @return stringa di caratteri.
 	 */
-	public static String insertName(){
-		view.stampaMenuIscrizione(2);
+	public static String insertString(String tipoInserimento) {
+		View.stampaRichiestaSingola(tipoInserimento);
 		try {
-			name = readStringNotNull();
+			string = readStringNotNull();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return name;
-	}
-	/**
-	 * Medoto per inserire il cognome, di tipo String, dell'user.
-	 * @return surname
-	 */
-	public static String insertSurname(){
-		view.stampaMenuIscrizione(3);
-		try {
-			surname = readStringNotNull();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return surname;
+		return string;
 	}
 
 	/**
-	 * Medoto per inserire il nick name, di tipo String, dell'user.
-	 * @return username
+	 * Metodo che permette all'admin di visualizzare a video la lista di utenti oppure no.
 	 */
-	public static String insertUsername(){
-		view.stampaMenuIscrizione(9);
-		try {
-			username = readStringNotNull();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return username;
+	public static void stampaUser(){
+		System.out.println(View.VISUALIZZARE_USER);
+		choise= readInt();
+		if (choise==0) Database.listUsers();
 	}
 
 	/**
-	 * Medoto per inserire la password, di tipo String, dell'user.
-	 * @return password
+	 * Metodo che permette di controllare se l'utente che si sta autenticando &egrave; un admin,
+	 * ovvero un operatore. Se lo &egrave; allora pu&ograve;
 	 */
-	public static String insertPass(){
-		view.stampaMenuIscrizione(4);
-		try {
-			password = readStringNotNull();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return password;
+	public static boolean checkIfAdmin(String username, String password){
+		if(username.equals("admin") && password.equals("admin")) return true;
+		else return false;
 	}
 
     /**
      * Metooo di controllo del Login da parte dell'User. L'autenticazione va a buon fine se l'username è presente all'interno
 	 * del Databese e se la password inserita corrisponde. Altrimenti si può uscire dal metodo o continuare a riprovare l'inserimento.
      */
-	public static void checkLoginIfTrue(){
-		end = false;
+	public static void checkLoginIfTrue(String username, String password){
+		boolean end = false;
 		do
 		{
-			username= insertUsername();
-			password= insertPass();
 			if(Database.checkLogin(username,password)==true){
-				System.out.println(view.AUTENTICAZIONE_SUCCESSO);
+				System.out.println(View.AUTENTICAZIONE_SUCCESSO);
 				/**
 				 * Controllo se l'iscrizione è scaduta.
 				 */
@@ -140,7 +113,7 @@ public class Library {
 				end=true;
 			}
 			else {
-				System.out.println(MG_ERRORE+ "Desideri riprovare? premi 0");
+				System.out.println(View.MG_ERRORE+ View.MG_ANCORA);
 				choise= readInt();
 				/**
 				 * Continua a ciclare se viene premuto 0, altrimenti si esce dal ciclo.
@@ -158,8 +131,8 @@ public class Library {
 	public static void renewalRegistration(User user){
 		if(isExpired(user)==true){
 			//possiamo rinnovare
-			view.stampaMenu(6);
-			view.stampaMenu(5);
+			System.out.println(View.MG_SCADUTA_ISCRIZIONE);
+			System.out.println(View.RINNOVO);
 			choise= readInt();
 			if(choise==0){
 				user.setRegistrationDate(LocalDate.now());
@@ -173,12 +146,8 @@ public class Library {
 	 * @return false se l'iscrizione dell'user non è scaduta e non è nel range dei giorni di rinnovo.
 	 */
 	public static boolean isExpired(User user){
-		if(user.getRegistrationDate().plusYears(rangeYear).isAfter(LocalDate.now()) || user.getRegistrationDate().plusDays(rangeDay).isAfter(LocalDate.now())){
-			return true;
-		}
-		return false;
+		return user.getRegistrationDate().plusYears(rangeYear).isBefore(LocalDate.now()) && user.getRegistrationDate().plusDays(rangeDay).isBefore(LocalDate.now());
 	}
-
     
     /**
 	 * Metodi di controllo dell'inserimento da tastiera di numeri di tipo interi.
@@ -186,7 +155,7 @@ public class Library {
 	 */
 	public static int readInt() {
 		Scanner readInt = new Scanner(System.in);
-	  	end = false;
+	  	boolean end = false;
 	  	int numInserito = 0;
 	  	do
 	  	{	
@@ -195,7 +164,7 @@ public class Library {
 	  			end = true ;
 	  			numInserito = readInt.nextInt();
 	  		}
-	  		else System.out.println(view.MG_ERRORE);
+	  		else System.out.println(View.MG_ERRORE);
 	  	}while(!end);
 	  	return numInserito;
 	}
@@ -218,7 +187,7 @@ public class Library {
      */
 	public static String readStringNotNull() throws Exception
 	{
-	   end = false;
+	   boolean end = false;
 	   String stringa = null;
 	   
 	   do
@@ -228,7 +197,7 @@ public class Library {
 		  {
 			 end = true;
 		  }
-		 else System.out.println(view.MG_ERRORE);
+		 else System.out.println(View.MG_ERRORE);
 	   } 
 	   while(!end);
 	   return stringa;

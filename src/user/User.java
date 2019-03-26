@@ -6,7 +6,8 @@ import java.time.Period;
 
 /**
  * Classe User, ovvero la classe associata all'utente/al fruitore dei servizi di prestito temporaneo. 
- * @author Reda, Simona
+ * @author Reda Kassame, Simona Ramazzotti.
+ * @version 1
  */
 public class User {
     private String name, surname, password, username;
