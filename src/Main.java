@@ -5,7 +5,6 @@ import view.View;
 import java.time.LocalDate;
 
 import static library.Library.*;
-//import java.sql.SQLException;
 
 /**
  * Classe main del programma servizio temporaneo di prestiti.
@@ -63,7 +62,7 @@ public class Main {
          			 */
 					Library.checkLoginIfTrue();
          			break;
-         	
+
          		default:
 					System.out.println(View.MG_ERRORE);
          			break;

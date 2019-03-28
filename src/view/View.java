@@ -38,6 +38,7 @@ public class View {
 
     public final static String VISUALIZZARE_USER=" Desideri visualizzare l'elenco degli attuali utenti? premi 0.";
     public final static String BENVENUTO_ADMIN=" Benvenuto operatore! ";
+    public final static String MINORENNE=" Non puoi iscriverti servizio poiche\' sei minorenne.";
 
 
     /**
