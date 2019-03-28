@@ -46,7 +46,6 @@ public class Main {
      				 */
 
 					Library.registrationProcess();
-					System.out.println(View.GRAZIE_ISCRIZIONE);
 					break;
          			
          	/**

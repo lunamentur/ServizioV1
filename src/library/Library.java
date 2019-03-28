@@ -29,7 +29,8 @@ public class Library {
         User user = new User(insertString(View.NOME), insertString(View.COGNOME), insertString(View.USER_NAME), insertString(View.PASSWORD), insertDate(), LocalDate.now());
         if(Database.checkIf18(user.getBirthDate()) != false){
             Database.insertUser(user);
-        }else System.out.println(View.MINORENNE);
+			System.out.println(View.GRAZIE_ISCRIZIONE);
+		}else System.out.println(View.MINORENNE);
     }
 
 	/**
