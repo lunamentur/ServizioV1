@@ -11,6 +11,7 @@ public class View {
     public final static String CORNICETTA ="**************************************";
     public final static String MG_ERRORE="Riprova, hai inserito un valore non valido\n";
     public final static String MG_ANCORA ="Desideri riprovare? premi 0";
+    public  final static String USERNAME_ESISTE="Il nickname esiste gia\' . Riprova inserendo un nuovo nick: ";
     public final static String MG_SCADUTA_ISCRIZIONE ="La sua iscrizione è scaduta poiche\' ha superato i termini prescritti.";
     public final static String MG_INIZIALE="Benvenuto nel Pannello dei Servizi di prestiti temporanei";
     public final static String AUTENTICAZIONE_SUCCESSO="Autenticazione avvenuta con successo, bentornato!";
@@ -21,7 +22,7 @@ public class View {
      * utente oppure, se gia\' in possesso di nome utente e password
      */
     public final static String [] RICHIESTE_MENU_INIZIALE ={" ISCRIVITI ai servizi di prestito temporaneo se sei un nuovo utente;",
-            " AUTENTICAZIONE se sei gia\' un'utente registrato ai servizi di prestito temporaneo;"};
+            " AUTENTICAZIONE se sei gia\' un utente registrato ai servizi di prestito temporaneo;"};
 
     /**
      * @param RINNOVO rappresenta la richiesta di rinnovo dell'iscrizione ai servizi di prestito temporaneo da sottoporre all'utente.

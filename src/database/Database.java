@@ -62,13 +62,13 @@ public class Database {
      * Pertanto confronta la data di nascita, di tipo LocalDate, con la data attuale, LocalDate.now(), affinche\' sia 
      * maggiore o uguale a 18 anni.
      * @param birthDate  Data di nascita dell'user, di tipo LocalDate. E\' richiesto che sia maggiorenne per poter diventare utente dei servizi.
-     * @return false se l'user non e\' maggiorenne. (e quindi non ha accesso ai servizi di prestito temporaneo)
-     * @return true se l'user e\' maggiorenne.
+     * @return false se l'user non &egrave; maggiorenne. (e quindi non ha accesso ai servizi di prestito temporaneo)
+     * @return true se l'user &egrave; maggiorenne.
      */
     public static boolean checkIf18(LocalDate birthDate){
         LocalDate now = LocalDate.now();
         int age = Period.between(birthDate,now).getYears();
-        if(age > 18){
+        if(age >= 18){
             return true;
         }
         else{
@@ -78,13 +78,23 @@ public class Database {
 
 
     /**
+     * Metodo che permette di verificare se un user &egrave; presente nel Database.
+     * @return true se &egrave; presente, false altrimenti
+     */
+    public static boolean checkIfUser(String username){
+
+        return userList.containsKey(username);
+    }
+
+
+    /**
      * Creazione di oggetti preimpostati.
      */
     public static void initAllObject() {
         //genero utenti
         User user1 = new User("test", "test", "test1", "test1", LocalDate.of(1996, 12, 01), LocalDate.of(2018, 01, 01));
-        User user2 = new User("test", "test", "test2", "test2", LocalDate.of(2000, 12, 01), LocalDate.of(1996, 01, 01));
-        User user3 = new User("test", "test", "test3", "test3", LocalDate.of(1988, 12, 01), LocalDate.of(2019, 01, 01));
+        User user2 = new User("test", "test", "test2", "test2", LocalDate.of(2000, 12, 01), LocalDate.of(2014, 04, 11));
+        User user3 = new User("test", "test", "test3", "test3", LocalDate.of(1988, 12, 01), LocalDate.of(2011, 01, 01));
         userList.put(user1.getUsername(), user1);
         userList.put(user2.getUsername(), user2);
         userList.put(user3.getUsername(), user3);

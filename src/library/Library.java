@@ -14,11 +14,10 @@ import java.util.*;
  */
 public class Library {
 	
-	private static boolean end;
 	private static String  password, username, string;
 	private static int year, month, day, choise;
 	private static long rangeYear=5;
-	private static long rangeDay=-10;
+	private static long rangeDay=10;
 	public static LocalDate birthDate;
 
 	/**
@@ -26,12 +25,29 @@ public class Library {
 	 * oggetto di tipo User, all'interno del Database.
 	 */
     public static void registrationProcess(){
-        User user = new User(insertString(View.NOME), insertString(View.COGNOME), insertString(View.USER_NAME), insertString(View.PASSWORD), insertDate(), LocalDate.now());
-        if(Database.checkIf18(user.getBirthDate()) != false){
+    	username= insertUserName();
+        User user = new User(insertString(View.NOME), insertString(View.COGNOME), username, insertString(View.PASSWORD), insertDate(), LocalDate.now());
+        if(Database.checkIf18(user.getBirthDate())){
             Database.insertUser(user);
 			System.out.println(View.GRAZIE_ISCRIZIONE);
 		}else System.out.println(View.MINORENNE);
     }
+
+	/**
+	 * Metodo che controlla se l'username e\' gia presente nel Database.
+	 * Se si continua a ciclare finche\' non ne viene inserito uno nuovo (inesistente).
+	 * @return username
+	 */
+	public static String insertUserName(){
+		boolean end=false;
+		do{
+			username=insertString(View.USER_NAME);
+			if(Database.checkIfUser(username)){
+				View.stampaRichiestaSingola(View.USERNAME_ESISTE);
+			} else end=true;
+		}while(!end);
+		return username;
+	}
 
 	/**
 	 * Medoto per inserire la data di nascita, di tipo LocalDate, dell'user.
@@ -145,7 +161,7 @@ public class Library {
 	 * @param user
 	 */
 	public static void renewalRegistration(User user){
-		if(isExpired(user)==true){
+		if(isExpired(user)){
 			//possiamo rinnovare
 			System.out.println(View.MG_SCADUTA_ISCRIZIONE);
 			System.out.println(View.RINNOVO);
@@ -162,7 +178,11 @@ public class Library {
 	 * @return false se l'iscrizione dell'user non è scaduta e non è nel range dei giorni di rinnovo.
 	 */
 	public static boolean isExpired(User user){
-		return user.getRegistrationDate().plusYears(rangeYear).isBefore(LocalDate.now()) && user.getRegistrationDate().plusDays(rangeDay).isBefore(LocalDate.now());
+		if(user.getRegistrationDate().plusYears(rangeYear).isEqual(LocalDate.now()) || (LocalDate.now().minusYears(rangeYear).isBefore(user.getRegistrationDate()) && LocalDate.now().minusYears(rangeYear).isAfter(user.getRegistrationDate().minusDays(rangeDay))))
+		{
+			return true;
+		}
+		return false;
 	}
     
     /**
@@ -171,18 +191,15 @@ public class Library {
 	 */
 	public static int readInt() {
 		Scanner readInt = new Scanner(System.in);
-	  	boolean end = false;
-	  	int numInserito = 0;
-	  	do
-	  	{	
-	  		if(readInt.hasNextInt())
-	  		{
-	  			end = true ;
-	  			numInserito = readInt.nextInt();
-	  		}
-	  		else System.out.println(View.MG_ERRORE);
-	  	}while(!end);
-	  	return numInserito;
+		int numeroInserito;
+		do {
+			while (!readInt.hasNextInt()) {
+				String input = readInt.next();
+				System.out.println(View.MG_ERRORE);
+			}
+			numeroInserito = readInt.nextInt();
+		} while (numeroInserito < 0 && !(String.valueOf(numeroInserito).equals(null)));
+		return numeroInserito;
 	}
 	
 	/**
@@ -205,10 +222,9 @@ public class Library {
 	{
 	   boolean end = false;
 	   String stringa = null;
-	   
 	   do
 	   {
-		 stringa = readString();
+		   stringa = readString();
 		 if (stringa.length() > 0)
 		  {
 			 end = true;

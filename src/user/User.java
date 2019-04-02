@@ -45,31 +45,12 @@ public class User {
     /**
      * Metodi di Set e Get della classe User.
      */
-    public String getName() {
-        return name;
-    }
     public String getUsername() {
         return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
@@ -82,10 +63,6 @@ public class User {
     /**
      * Metodo per fare il set della data di nascita dell'oggetto di tipo User.
      */
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public LocalDate getRegistrationDate() {
         return registrationDate;
     }

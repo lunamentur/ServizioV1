@@ -14,8 +14,6 @@ import static library.Library.*;
 public class Main {
     public static void main(String[] args) {
 
-         String username, password;
-
 		/**
 		 * credo degli oggetti preimpostati e li carico nel programma per i test.
 		 */
