@@ -27,6 +27,14 @@ public class Database {
         userList.put(newuser.getUsername(),newuser);
         System.out.println("<+> New user added!");
     }
+
+    /**
+     * Metodo che permette di rimuovere un'utente dall'archivio.
+     */
+    public static void removeUser(String username){
+        userList.remove(username);
+    }
+
     /**
      * Metodo, di stampa, che permette di visualizzare a video la lista di tutti gli user all'interno del database, l'HashMap.
      */
@@ -98,6 +106,12 @@ public class Database {
         userList.put(user1.getUsername(), user1);
         userList.put(user2.getUsername(), user2);
         userList.put(user3.getUsername(), user3);
+
+        User userRinnovo= new User("test","test","rinnovo","rinnovo",LocalDate.of(1996, 01, 01), LocalDate.of(2014, 04, 18));
+        userList.put(userRinnovo.getUsername(), userRinnovo);
+
+        User userScaduto= new User("test","test","scaduto","scaduto",LocalDate.of(1996, 01, 01), LocalDate.of(2012, 02, 03));
+        userList.put(userScaduto.getUsername(), userScaduto);
     }
 
 

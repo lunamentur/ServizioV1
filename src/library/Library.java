@@ -140,8 +140,12 @@ public class Library {
 					/**
 					 * Controllo se l'iscrizione è scaduta.
 					 */
-					renewalRegistration(Database.getUser(username));
+					userExpired(Database.getUser(username));
+					if(!Database.getUser(username).getName().equals("_expired_")){
+						renewalRegistration(Database.getUser(username));
+					} else Database.removeUser(username);
 					end=true;
+
 				}
 				else {
 					System.out.println(View.MG_ERRORE+ View.MG_ANCORA);
@@ -161,7 +165,7 @@ public class Library {
 	 * @param user
 	 */
 	public static void renewalRegistration(User user){
-		if(isExpired(user)){
+		if(isRenewal(user)){
 			//possiamo rinnovare
 			System.out.println(View.MG_SCADUTA_ISCRIZIONE);
 			System.out.println(View.RINNOVO);
@@ -177,13 +181,40 @@ public class Library {
 	 * @return true se l'iscrizione dell'user è scaduta, quindi può essere rinnovata.
 	 * @return false se l'iscrizione dell'user non è scaduta e non è nel range dei giorni di rinnovo.
 	 */
-	public static boolean isExpired(User user){
+	public static boolean isRenewal(User user){
 		if(user.getRegistrationDate().plusYears(rangeYear).isEqual(LocalDate.now()) || (LocalDate.now().minusYears(rangeYear).isBefore(user.getRegistrationDate()) && LocalDate.now().minusYears(rangeYear).isAfter(user.getRegistrationDate().minusDays(rangeDay))))
 		{
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * Metodo che controlla che l'iscrizione dell'user sia scaduta.
+	 * @return true se l'iscrizione dell'user è scaduta.
+	 * @return false se l'iscrizione dell'user non è scaduta.
+	 */
+	public static boolean isExpired(User user){
+		boolean equalYearCondition= user.getRegistrationDate().plusYears(rangeYear).getYear()== LocalDate.now().getYear() && LocalDate.now().isAfter(user.getRegistrationDate().plusYears(rangeYear));
+		boolean differentYearCondition= LocalDate.now().getYear()>user.getRegistrationDate().plusYears(rangeYear).getYear();
+		if( equalYearCondition || differentYearCondition)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Metodo che se l'utente ha l'iscrizione scaduta, lo contrassegna come scaduto tramite il name e non la chiave primaria username.
+	 * l'utente sarà costretto registrarsi nuovamente.
+	 */
+	public static void userExpired(User user){
+		if(isExpired(user)){
+			View.stampaRichiestaSingola(View.SCADUTA_NON_RINNOVABILE);
+			user.setName("_expired_");
+		}
+	}
+
     
     /**
 	 * Metodi di controllo dell'inserimento da tastiera di numeri di tipo interi.

@@ -16,6 +16,8 @@ public class View {
     public final static String MG_INIZIALE="Benvenuto nel Pannello dei Servizi di prestiti temporanei";
     public final static String AUTENTICAZIONE_SUCCESSO="Autenticazione avvenuta con successo, bentornato!";
     public final static String GRAZIE_ISCRIZIONE="Grazie per esserti Iscritto ai Servizi di Prestito Temporaneo.";
+    public final  static  String SCADUTA_NON_RINNOVABILE="Devi reistrarti nuovamente, la tua iscrizione e\' scaduta e non puo\' essere rinnovata.";
+
     /**
      * Creazione di una stringa COSTANTE
      * @param RICHIESTE_MENU rappresenta le voci del menu che si vuole creare nel momento iniziale di accesso da parte dell'utente: ovvero se iscriversi come nuovo

@@ -53,6 +53,14 @@ public class User {
         return password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * Metodo per fare il get della data di nascita dell'oggetto di tipo User.
      */
